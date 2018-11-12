@@ -1,6 +1,7 @@
 package nightknight;
 
 import java.util.ArrayList;
+import javafx.stage.Screen;
 import nightknight.assets.data.BlockType;
 import nightknight.collision.CollisionController;
 import nightknight.constants.Sizes;
@@ -55,51 +56,27 @@ public class Map implements Renderable, Changeable, KeyboardListener, Shiftable 
     
     @Override
     public void render(Graphics g) {
-        /*for(ArrayList<Tile> list : tiles)
-            for(Tile t : list)
-                t.render(g);*/
-        
-        g.translate(-(float)shift.getWidth()*Sizes.TILE_SIZE, -(float)shift.getHeight()*Sizes.TILE_SIZE);
-        
-        for(int l = (int)shift.getHeight(); l < shift.getHeight() + maxlinha; l++) {
-            for(int c = (int)shift.getWidth(); c < shift.getWidth() + maxcoluna; c++) {
-                tiles.get(l).get(c).render(g);
+        g.pushTransform();
+            int fline = (int) (Sizes.MAP_HEIGHT - shift.height - (maxlinha/2));
+            int fcol  = (int) (shift.width - (maxcoluna/2));
+            
+            fcol = (fcol < 0 ? 0 : fcol);
+            fcol = (fcol > tiles.get(0).size() ? tiles.get(0).size() : fcol);
+            
+            fline = (fline < 0 ? 0 : fline);
+            fline = (fline > tiles.size() ? tiles.size() : fline);
+            
+            g.translate(-(float)shift.getWidth()*Sizes.TILE_SIZE, -(Sizes.MAP_HEIGHT-(float)shift.getHeight())*Sizes.TILE_SIZE);
+            for(int l = fline; l < tiles.size(); l++) {
+                for(int c = fcol; c < tiles.get(0).size(); c++) {
+                    tiles.get(l).get(c).render(g);
+                }
             }
-        }
-        g.translate((float)shift.getWidth()*Sizes.TILE_SIZE, (float)shift.getHeight()*Sizes.TILE_SIZE);
-    }
-    
-    public void incrementaLinha() {
-        if((shift.getHeight()+maxlinha+1) <= Sizes.MAP_HEIGHT) shift.setSize(shift.getWidth(), shift.getHeight()+1);
-    }
-    
-    public void decrementaLinha() {
-        if(shift.getHeight()-1 >= 0) shift.setSize(shift.getWidth(), shift.getHeight()-1);
-    }
-    
-    public void incrementaColuna() {
-        if(shift.getWidth()+maxcoluna+1 <= Sizes.MAP_LENGTH) shift.setSize(shift.getWidth()+1, shift.getHeight());
-    }
-    
-    public void decrementaColuna() {
-        if(shift.getWidth()-1 >= 0) shift.setSize(shift.getWidth()-1, shift.getHeight());
+        g.popTransform();
     }
 
     @Override
-    public void atualiza() {
-        if(KEYBOARD.containsKey(Input.KEY_DOWN) && KEYBOARD.get(Input.KEY_DOWN)) {
-            this.incrementaLinha();
-        }
-        if(KEYBOARD.containsKey(Input.KEY_UP) && KEYBOARD.get(Input.KEY_UP)) {
-            this.decrementaLinha();
-        }
-        if(KEYBOARD.containsKey(Input.KEY_LEFT) && KEYBOARD.get(Input.KEY_LEFT)) {
-            this.decrementaColuna();
-        }
-        if(KEYBOARD.containsKey(Input.KEY_RIGHT) && KEYBOARD.get(Input.KEY_RIGHT)) {
-            this.incrementaColuna();
-        }
-    }
+    public void atualiza() {}
     
     public static Map getInstance() {
         return MapHolder.INSTANCE;

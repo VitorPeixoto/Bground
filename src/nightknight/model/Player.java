@@ -22,7 +22,6 @@ import org.newdawn.slick.Input;
  * @author Vitor
  */
 public class Player extends RectangleObject implements KeyboardListener, Renderable, Changeable, Shiftable {
-    private float x, y;
     private Vector2f movement;
     private double miningPower = 20;
     private Image image;
@@ -30,35 +29,31 @@ public class Player extends RectangleObject implements KeyboardListener, Rendera
     
     public Player(int x, int y) {
         super(x, y, 1, 1, Sizes.TILE_SIZE);
-        image = ImageAssets.getImage("steve.png");        
-        /*this.x = x;
-        this.y = y;
-        this.position = new Vector2f(x, y);*/
+        image = ImageAssets.getImage("steve.png");
         movement = new Vector2f(0, 0);
     }
     
     @Override
-    public void atualiza() {        
-        float xOld = x, yOld = y;
+    public void atualiza() {
         if(KEYBOARD == null) return;
         if(KEYBOARD.getOrDefault(Input.KEY_W, false)) {
-            y+=0.2;
             movement.y = 0.2f;
         }
         if(KEYBOARD.getOrDefault(Input.KEY_A, false)) {
-            x-=0.2;
             movement.x = -0.2f;
         }
-        if(KEYBOARD.getOrDefault(Input.KEY_S, false)) {            
-            y-=0.2;
+        if(KEYBOARD.getOrDefault(Input.KEY_S, false)) {
             movement.y = -0.2f;
         }
         if(KEYBOARD.getOrDefault(Input.KEY_D, false)) {
-            x+=0.2;
             movement.x = 0.2f;
         }
         if(handleCollision()) {
             position.add(movement);            
+            //if(position.x >= 0 && position.x <= Sizes.MAP_LENGTH)
+                Shiftable.shift.width  = (int) position.x;
+            //if(position.y >= 0 && position.x <= Sizes.MAP_HEIGHT)            
+                Shiftable.shift.height = (int) position.y;
         }
         movement.scale(0);
     }
@@ -95,15 +90,17 @@ public class Player extends RectangleObject implements KeyboardListener, Rendera
                 Block t = (Block)object;
                 t.setSighted(true);
             }
-        } 
+        }
+        
+        if(position.added(movement).x < 0 || position.added(movement).x > Sizes.MAP_LENGTH) canMove = false;
+        if(Sizes.MAP_HEIGHT - position.added(movement).y < 0 || position.added(movement).y > Sizes.MAP_HEIGHT) canMove = false;
         return canMove;
     }
     
     @Override
     public void render(Graphics g) {
         g.pushTransform();
-            g.scale(scale, scale);
-            g.translate((int)position.x-shift.width, Sizes.MAP_HEIGHT-(int)position.y-shift.height);
+        g.scale(scale, scale);
             image.draw(0, 0, 1, 1);
         g.popTransform();
     }

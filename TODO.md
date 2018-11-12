@@ -8,8 +8,9 @@
     - [ ] QuadTree só para UI?
 
 ## Movimento
-- [ ] Centralizar tela no personagem
-    - [ ] Tela andar somente com o personagem
+- [X] Centralizar tela no personagem
+    - [X] Tela andar somente com o personagem
+- [ ] Implementar velocidade de movimento
 
 ## Assets
 - [ ] Novos blocos
@@ -17,10 +18,17 @@
 - [ ] MinedImage dos Blocos
 - [ ] Imagem de fundo
 
+## Inventario
+- [ ] Slots de equipamento
+- [ ] Tamanho variável baseado em mochilas?
+- [ ] Items com peso?
+- [ ] Implementar divisão de blocos onMouseDragged
+
 ## Renderização
 - [ ] Animação estática entre Drops?
 
 ## Geral código
+- [ ] Sistema leitura de blocos em Chunks
 
 ## Outro
 
@@ -37,6 +45,11 @@
 
 ## Assets
 
+## Inventario
+- [X] Planejamento de inventário
+- [X] Criar classe Slot
+    - [X] Categorizar slots com herança de tipos de item?
+
 ## Renderização
 - [X] Escurecer blocos não-visitados
 - [X] Método de animação mais organizado
@@ -47,10 +60,7 @@
     - [X] Superclasse com x, y, width e height?
 
 ## Geral código
-- [X] Planejamento de inventário
 - [X] Refatorar para utilizar esquema push-pop transform
-- [X] Criar classe Slot
-    - [X] Categorizar slots com herança de tipos de item?
 
 ## Outro
 - [X] Subir pro Git

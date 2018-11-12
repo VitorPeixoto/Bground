@@ -65,8 +65,7 @@ public class DefaultGameState implements GameState, KeyboardListener, MouseListe
 
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
-        /*for(int i = 0; i < renderables.size(); i++)
-            renderables.get(i).render(grphcs);*/
+        grphcs.translate(Sizes.SCREEN_WIDTH/2, Sizes.SCREEN_HEIGHT/2);
         renderables.forEach((renderable) -> renderable.render(grphcs));
     }
 

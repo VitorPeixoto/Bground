@@ -6,6 +6,7 @@ import nightknight.assets.images.ImageAssets;
 import nightknight.collision.RectangleObject;
 import nightknight.constants.Sizes;
 import nightknight.interfaces.Renderable;
+import static nightknight.interfaces.Shiftable.shift;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -57,7 +58,7 @@ public class Block extends RectangleObject implements Renderable {
         
         g.pushTransform();
             g.scale(Sizes.TILE_SIZE, Sizes.TILE_SIZE);
-            g.translate(position.x, (Sizes.MAP_HEIGHT-position.y));
+            g.translate(position.x, ((Sizes.MAP_HEIGHT)-position.y));
             image.draw(0, 0, 1, 1, mined ? new Color(1, 1, 1, 0.3f) : Color.white);
             if(!mined) this.drawDamageImage();
         g.popTransform();            

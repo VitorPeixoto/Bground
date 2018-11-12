@@ -5,11 +5,9 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import nightknight.collision.RectangleObject;
 import nightknight.constants.Sizes;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Vector2f;
 
 /**
  *
