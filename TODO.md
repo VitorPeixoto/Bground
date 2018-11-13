@@ -26,11 +26,14 @@
 
 ## Renderização
 - [ ] Animação estática entre Drops?
+- [ ] Renderização independente de elementos UI
 
 ## Geral código
 - [ ] Sistema leitura de blocos em Chunks
 
 ## Outro
+- [ ] Corrigir dimensões verticais do mapa
+- [ ] Organizar Sizes.WORLD_HEIGHT
 
 # Finalizados
 

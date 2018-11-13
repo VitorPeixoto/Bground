@@ -54,7 +54,7 @@ public class Block extends RectangleObject implements Renderable {
     
     @Override
     public void render(Graphics g) {
-        if(image == null || !sighted) return;
+        if(image == null/* || !sighted*/) return;
         
         g.pushTransform();
             g.scale(Sizes.TILE_SIZE, Sizes.TILE_SIZE);

@@ -92,8 +92,8 @@ public class Player extends RectangleObject implements KeyboardListener, Rendera
             }
         }
         
-        if(position.added(movement).x < 0 || position.added(movement).x > Sizes.MAP_LENGTH) canMove = false;
-        if(Sizes.MAP_HEIGHT - position.added(movement).y < 0 || position.added(movement).y > Sizes.MAP_HEIGHT) canMove = false;
+        /*if(position.added(movement).x < 0 || position.added(movement).x > Sizes.MAP_LENGTH) canMove = false;
+        if(Sizes.MAP_HEIGHT - position.added(movement).y < 0 || position.added(movement).y > Sizes.MAP_HEIGHT) canMove = false;*/
         return canMove;
     }
     

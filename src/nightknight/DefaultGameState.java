@@ -40,7 +40,7 @@ public class DefaultGameState implements GameState, KeyboardListener, MouseListe
         changeables = new ArrayList<>();
         renderables = new ArrayList<>();
         
-        player = new Player(0, Sizes.MAP_HEIGHT);
+        player = new Player(0, BlockGenerator.getSurface()+1);
     }
     
     @Override

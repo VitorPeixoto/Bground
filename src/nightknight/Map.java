@@ -1,19 +1,18 @@
 package nightknight;
 
 import java.util.ArrayList;
-import javafx.stage.Screen;
+import java.util.HashMap;
 import nightknight.assets.data.BlockType;
 import nightknight.collision.CollisionController;
 import nightknight.constants.Sizes;
 import nightknight.interfaces.Changeable;
 import nightknight.interfaces.KeyboardListener;
-import static nightknight.interfaces.KeyboardListener.KEYBOARD;
 import nightknight.interfaces.Renderable;
 import nightknight.interfaces.Shiftable;
 import static nightknight.interfaces.Shiftable.shift;
 import nightknight.model.Block;
+import nightknight.model.Chunk;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
 
 /**
  *
@@ -23,13 +22,17 @@ public class Map implements Renderable, Changeable, KeyboardListener, Shiftable 
     private float maxlinha, maxcoluna;
     private ArrayList<ArrayList<Block>> tiles;
     
+    private HashMap<String, Chunk> chunks;
+    
     private Map(int maxlinha, int maxcoluna/* Map */) {
         tiles = new ArrayList<>();
         
+        //chunks = new HashMap<>();
+        chunks = new HashMap<>(9);
         this.maxlinha = maxlinha;
         this.maxcoluna = maxcoluna;
         
-        ArrayList<Block> tileLine;
+        /*ArrayList<Block> tileLine;
         for(int linha = Sizes.MAP_HEIGHT; linha > 0; linha--) {
             tileLine = new ArrayList<>();
             Block tile;
@@ -42,7 +45,8 @@ public class Map implements Renderable, Changeable, KeyboardListener, Shiftable 
                 }
             }
             tiles.add(tileLine);
-        }
+        }*/
+        
     }
 
     public ArrayList<ArrayList<Block>> getTiles() {
@@ -57,7 +61,7 @@ public class Map implements Renderable, Changeable, KeyboardListener, Shiftable 
     @Override
     public void render(Graphics g) {
         g.pushTransform();
-            int fline = (int) (Sizes.MAP_HEIGHT - shift.height - (maxlinha/2));
+            /*int fline = (int) (Sizes.MAP_HEIGHT - shift.height - (maxlinha/2));
             int fcol  = (int) (shift.width - (maxcoluna/2));
             
             fcol = (fcol < 0 ? 0 : fcol);
@@ -71,12 +75,39 @@ public class Map implements Renderable, Changeable, KeyboardListener, Shiftable 
                 for(int c = fcol; c < tiles.get(0).size(); c++) {
                     tiles.get(l).get(c).render(g);
                 }
-            }
+            }*/
+            g.translate(-(float)shift.width*Sizes.TILE_SIZE, -(Sizes.MAP_HEIGHT-(float)shift.height)*Sizes.TILE_SIZE);
+            chunks.forEach((String key, Chunk c) -> c.render(g));
         g.popTransform();
     }
 
     @Override
-    public void atualiza() {}
+    public void atualiza() {
+        loadChunks();
+    }
+    
+    private void loadChunks() {
+        int x = shift.width/(Sizes.CHUNK_SIZE);
+        int y = shift.height/(Sizes.CHUNK_SIZE);
+        for(int i = x-Sizes.CHUNK_RADIUS; i <= x+Sizes.CHUNK_RADIUS; i++) {
+            for(int j = y-Sizes.CHUNK_RADIUS; j <= y+Sizes.CHUNK_RADIUS; j++) {
+                loadChunk(i, j);
+            }
+        }
+    }
+        
+    private void loadChunk(int x, int y) {        
+        y = (y < 0 ? 0 : y);
+        String key = ""+x+y;
+        if(!chunks.containsKey(key)) {
+            Chunk c = new Chunk(x, y);
+            c.load();
+            System.out.println("Loaded chunk "+key);
+            System.out.println("Chunks loaded: "+chunks.size());
+            chunks.put(key, c);
+        }
+    }
+
     
     public static Map getInstance() {
         return MapHolder.INSTANCE;
