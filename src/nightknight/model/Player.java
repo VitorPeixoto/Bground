@@ -101,7 +101,7 @@ public class Player extends RectangleObject implements KeyboardListener, Rendera
     public void render(Graphics g) {
         g.pushTransform();
         g.scale(scale, scale);
-            image.draw(0, 0, 1, 1);
+            image.draw(-0.5f, 0.5f, 1, -1);
         g.popTransform();
     }
 

@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nightknight.constants.Sizes;
+import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 
@@ -25,8 +26,8 @@ public class Main {
         Sizes.SCREEN_WIDTH = dimension.width;
         Sizes.SCREEN_HEIGHT = dimension.height;
 
-        Sizes.LINES_PER_SCREEN   = Sizes.SCREEN_HEIGHT/Sizes.TILE_SIZE;
-        Sizes.COLUMNS_PER_SCREEN = Sizes.SCREEN_WIDTH/Sizes.TILE_SIZE;
+        Sizes.LINES_PER_SCREEN   = (int)Math.ceil((double)Sizes.SCREEN_HEIGHT/Sizes.TILE_SIZE);
+        Sizes.COLUMNS_PER_SCREEN = (int)Math.ceil((double)Sizes.SCREEN_WIDTH/Sizes.TILE_SIZE);
         
         try {            
             //AppGameContainer app = new AppGameContainer(new Game((dimension.width-(30*32))/2, (dimension.height-(30*18))/2));

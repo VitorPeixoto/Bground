@@ -125,7 +125,7 @@ public class InventoryController extends Rectangle implements Renderable, Change
     
     @Override
     public void render(Graphics g) {
-        g.translate(-Sizes.SCREEN_WIDTH/2, -Sizes.SCREEN_HEIGHT/2);
+        //g.translate(Sizes.SCREEN_WIDTH/2, Sizes.SCREEN_HEIGHT/2);
         if(!this.hidden)
             renderInventory(g);
         renderHotbar(g);

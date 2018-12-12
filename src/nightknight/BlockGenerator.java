@@ -11,7 +11,6 @@ import nightknight.constants.Sizes;
 public class BlockGenerator {
     private static Random random = new Random();
     
-    
     public static BlockType generateBlock(int y) {
         if(y > Sizes.MAP_HEIGHT-2) return BlockType.AIR;
         else if(y == getSurface()) return BlockType.GRASS;

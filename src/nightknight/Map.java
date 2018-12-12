@@ -2,8 +2,6 @@ package nightknight;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import nightknight.assets.data.BlockType;
-import nightknight.collision.CollisionController;
 import nightknight.constants.Sizes;
 import nightknight.interfaces.Changeable;
 import nightknight.interfaces.KeyboardListener;
@@ -76,7 +74,7 @@ public class Map implements Renderable, Changeable, KeyboardListener, Shiftable 
                     tiles.get(l).get(c).render(g);
                 }
             }*/
-            g.translate(-(float)shift.width*Sizes.TILE_SIZE, -(Sizes.MAP_HEIGHT-(float)shift.height)*Sizes.TILE_SIZE);
+            g.translate(-(float)shift.width*Sizes.TILE_SIZE, -(/*Sizes.MAP_HEIGHT*/(float)shift.height)*Sizes.TILE_SIZE);            
             chunks.forEach((String key, Chunk c) -> c.render(g));
         g.popTransform();
     }
@@ -84,10 +82,16 @@ public class Map implements Renderable, Changeable, KeyboardListener, Shiftable 
     @Override
     public void atualiza() {
         loadChunks();
+        chunks.forEach((String s, Chunk c) -> (c.atualiza()));
     }
     
     private void loadChunks() {
-        int x = shift.width/(Sizes.CHUNK_SIZE);
+        int x;
+        if(shift.width >= 0)
+            x = shift.width/(Sizes.CHUNK_SIZE);
+        else
+            x = (shift.width-Sizes.CHUNK_SIZE+1)/(Sizes.CHUNK_SIZE);
+        
         int y = shift.height/(Sizes.CHUNK_SIZE);
         for(int i = x-Sizes.CHUNK_RADIUS; i <= x+Sizes.CHUNK_RADIUS; i++) {
             for(int j = y-Sizes.CHUNK_RADIUS; j <= y+Sizes.CHUNK_RADIUS; j++) {
@@ -96,7 +100,7 @@ public class Map implements Renderable, Changeable, KeyboardListener, Shiftable 
         }
     }
         
-    private void loadChunk(int x, int y) {        
+    private void loadChunk(int x, int y) {
         y = (y < 0 ? 0 : y);
         String key = ""+x+y;
         if(!chunks.containsKey(key)) {

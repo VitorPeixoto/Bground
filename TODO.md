@@ -1,9 +1,9 @@
 # TODO List
 
 ## Colisão
-- [ ] Colisão com as boundaries do mapa
-    - [ ] Mapa limitado?
-    - [ ] Gerar novo "chunk"?
+- [x] Colisão com as boundaries do mapa
+    - [-] Mapa limitado?
+    - [x] Gerar novo "chunk"?
 - [ ] Tratar melhor colisão de UI
     - [ ] QuadTree só para UI?
 
@@ -16,7 +16,8 @@
 - [ ] Novos blocos
 - [ ] Ferramentas de som
 - [ ] MinedImage dos Blocos
-- [ ] Imagem de fundo
+- [X] Imagem de fundo
+    - [ ] Day/Night cicle
 
 ## Inventario
 - [ ] Slots de equipamento
@@ -26,14 +27,14 @@
 
 ## Renderização
 - [ ] Animação estática entre Drops?
-- [ ] Renderização independente de elementos UI
+- [x] Renderização independente de elementos UI
 
 ## Geral código
-- [ ] Sistema leitura de blocos em Chunks
+- [x] Sistema leitura de blocos em Chunks
 
 ## Outro
-- [ ] Corrigir dimensões verticais do mapa
-- [ ] Organizar Sizes.WORLD_HEIGHT
+- [x] Corrigir dimensões verticais do mapa
+- [x] Organizar Sizes.WORLD_HEIGHT
 
 # Finalizados
 
