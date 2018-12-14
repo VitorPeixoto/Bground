@@ -1,6 +1,7 @@
 package nightknight;
 
 import java.util.ArrayList;
+import nightknight.assets.images.ImageAssets;
 import nightknight.collision.Rectangle;
 import nightknight.constants.Shortcuts;
 import nightknight.constants.Sizes;
@@ -9,9 +10,14 @@ import nightknight.interfaces.Changeable;
 import nightknight.interfaces.KeyboardListener;
 import nightknight.interfaces.MouseListener;
 import nightknight.interfaces.Renderable;
+import nightknight.model.EquipmentSlot;
 import nightknight.model.Item;
 import nightknight.model.QuickSlot;
 import nightknight.model.Slot;
+import nightknight.model.items.Boot;
+import nightknight.model.items.Chestplate;
+import nightknight.model.items.Helmet;
+import nightknight.model.items.Leg;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Point;
@@ -23,6 +29,13 @@ import org.newdawn.slick.geom.Point;
 public class InventoryController extends Rectangle implements Renderable, Changeable, KeyboardListener {
     private boolean hidden;
     private final int borderThickness = 3, shadowThickness = 5, gap = 2;
+    
+    private EquipmentSlot helmetSlot;
+    private EquipmentSlot chestplateSlot;
+    private EquipmentSlot legSlot;
+    private EquipmentSlot bootSlot;
+    
+    private ArrayList<EquipmentSlot> equipment;
     private ArrayList<Slot> items;
     private ArrayList<QuickSlot> hotbar;
     
@@ -34,6 +47,7 @@ public class InventoryController extends Rectangle implements Renderable, Change
         
         /* Total - hotbar */
         int normalSlotAmount = Sizes.INVENTORY_SLOT_AMOUNT-Sizes.INVENTORY_SLOT_COLUMN;
+        equipment = new ArrayList<>(4);
         items = new ArrayList<>(normalSlotAmount);
         hotbar = new ArrayList<>(Sizes.INVENTORY_SLOT_COLUMN);
         
@@ -41,8 +55,7 @@ public class InventoryController extends Rectangle implements Renderable, Change
         
         width = ((Sizes.INVENTORY_SLOT_COLUMN*(Sizes.INVENTORY_SLOT_SIZE+Sizes.INVENTORY_SLOT_GAP) + (Sizes.INVENTORY_MARGIN_X*2)));
         
-        /* 2: 1 hotbar + 1 margin */
-        height = ((rows+2)*(Sizes.INVENTORY_SLOT_SIZE+Sizes.INVENTORY_SLOT_GAP)+(Sizes.INVENTORY_MARGIN_Y*2));
+        height = ((rows+5)*(Sizes.INVENTORY_SLOT_SIZE+Sizes.INVENTORY_SLOT_GAP)+(Sizes.INVENTORY_MARGIN_Y*2))+(2*Sizes.INVENTORY_MARGIN_Y);
         
         position.x = (Sizes.SCREEN_WIDTH/2) - (width/2);
         position.y = (Sizes.SCREEN_HEIGHT/2) - (height/2);
@@ -50,12 +63,27 @@ public class InventoryController extends Rectangle implements Renderable, Change
         float x = this.position.x+Sizes.INVENTORY_MARGIN_X;
         float y = this.position.y+Sizes.INVENTORY_MARGIN_Y;
         
-        for(int row = 0; row < (rows+1); row++) {
+        helmetSlot = new EquipmentSlot(x+(0*(Sizes.INVENTORY_SLOT_SIZE+gap)), y+(0*(Sizes.INVENTORY_SLOT_SIZE+gap)), Sizes.INVENTORY_SLOT_SIZE, Sizes.INVENTORY_SLOT_SIZE, ImageAssets.getImage("items/", "slot_empty_helmet.png"));
+        chestplateSlot = new EquipmentSlot(x+(0*(Sizes.INVENTORY_SLOT_SIZE+gap)), y+(1*(Sizes.INVENTORY_SLOT_SIZE+gap)), Sizes.INVENTORY_SLOT_SIZE, Sizes.INVENTORY_SLOT_SIZE, ImageAssets.getImage("items/", "slot_empty_chestplate.png"));
+        legSlot = new EquipmentSlot(x+(0*(Sizes.INVENTORY_SLOT_SIZE+gap)), y+(2*(Sizes.INVENTORY_SLOT_SIZE+gap)), Sizes.INVENTORY_SLOT_SIZE, Sizes.INVENTORY_SLOT_SIZE, ImageAssets.getImage("items/", "slot_empty_leggings.png"));
+        bootSlot = new EquipmentSlot(x+(0*(Sizes.INVENTORY_SLOT_SIZE+gap)), y+(3*(Sizes.INVENTORY_SLOT_SIZE+gap)), Sizes.INVENTORY_SLOT_SIZE, Sizes.INVENTORY_SLOT_SIZE, ImageAssets.getImage("items/", "slot_empty_boots.png"));
+        
+        equipment.add(helmetSlot);
+        equipment.add(chestplateSlot);
+        equipment.add(legSlot);
+        equipment.add(bootSlot);
+        
+        y+=Sizes.INVENTORY_MARGIN_Y;
+        
+        for(int row = 4; row < (rows+5); row++) {
+            if(row == (rows+4)) y+=Sizes.INVENTORY_MARGIN_Y;
+            
             for(int col = 0; col < Sizes.INVENTORY_SLOT_COLUMN; col++) {
-                if(row < rows)
+                if(row < (rows+4))
                     items.add(new Slot(x+(col*(Sizes.INVENTORY_SLOT_SIZE+gap)), y+(row*(Sizes.INVENTORY_SLOT_SIZE+gap)), Sizes.INVENTORY_SLOT_SIZE, Sizes.INVENTORY_SLOT_SIZE));
-                else
-                    hotbar.add(new QuickSlot(x+(col*(Sizes.INVENTORY_SLOT_SIZE+gap)), y+((row+1)*(Sizes.INVENTORY_SLOT_SIZE+gap)), Sizes.INVENTORY_SLOT_SIZE, Sizes.INVENTORY_SLOT_SIZE, Shortcuts.TOOLBAR_SHORTCUTS[col]));
+                else {
+                    hotbar.add(new QuickSlot(x+(col*(Sizes.INVENTORY_SLOT_SIZE+gap)), y+((row)*(Sizes.INVENTORY_SLOT_SIZE+gap)), Sizes.INVENTORY_SLOT_SIZE, Sizes.INVENTORY_SLOT_SIZE, Shortcuts.TOOLBAR_SHORTCUTS[col]));
+                }   
             }
         }
     }
@@ -76,6 +104,9 @@ public class InventoryController extends Rectangle implements Renderable, Change
             hotbar.forEach((Slot s) -> {
                 handleSlotClick(s, event);
             });
+            equipment.forEach((EquipmentSlot es) -> {
+                handleSlotClick(es, event);
+            });
         }
         if(selectedItem != null && MouseListener.moveEvents.size() > 0) {
             location = MouseListener.moveEvents.poll();
@@ -90,12 +121,13 @@ public class InventoryController extends Rectangle implements Renderable, Change
                 selectedItem = s.getItem();
                 s.setItem(null);
             }
-            else if(s.pushItem(selectedItem)) {
-                selectedItem = null;
-            } else {
-                Item aux = selectedItem;
-                selectedItem = s.getItem();
-                s.setItem(aux);
+            else {
+                Item response = s.pushItem(selectedItem, true);
+                if(response == selectedItem) {
+                    selectedItem = null;
+                } else if(response != null) {
+                    selectedItem = response;
+                }
             }
         }
         else if(event.getButton() == MouseEvent.RIGHT_BUTTON) {
@@ -114,7 +146,8 @@ public class InventoryController extends Rectangle implements Renderable, Change
                 Item m = selectedItem.copy();
                 m.setAmount(1);
                 // Incrementa em 1
-                if(s.pushItem(m)) {
+                Item response = s.pushItem(m, false);
+                if(response == m) {
                     selectedItem.setAmount(selectedItem.getAmount()-1);
                     if(selectedItem.getAmount() <= 0)
                         selectedItem = null;
@@ -145,12 +178,15 @@ public class InventoryController extends Rectangle implements Renderable, Change
     }
     
     public void pushItem(Item item) {
+        Item response;
         for(int i = 0; i < hotbar.size(); i++) {
-            if(hotbar.get(i).pushItem(item))
+            response = hotbar.get(i).pushItem(item, false);
+            if(response == item)
                 return;
         }
         for(int i = 0; i < items.size(); i++) {
-            if(items.get(i).pushItem(item))
+            response = items.get(i).pushItem(item, false);
+            if(response == item)
                 return;
         }
     }
@@ -169,7 +205,7 @@ public class InventoryController extends Rectangle implements Renderable, Change
         g.popTransform();
     }
     
-    public void renderInventory(Graphics g) {
+    private void renderBackground(Graphics g) {
         g.setColor(Color.black);
         drawRoundRect(g, position.x, position.y, width, height, 2, borderThickness);
         
@@ -184,9 +220,20 @@ public class InventoryController extends Rectangle implements Renderable, Change
         
         g.setColor(Color.black);
         g.drawString("Inventory", position.x+Sizes.INVENTORY_MARGIN_X, position.y+(Sizes.INVENTORY_MARGIN_Y/2));
+    }
+    
+    public void renderInventory(Graphics g) {
+        renderBackground(g);
         
+        equipment.forEach((Slot s) -> s.render(g));
+
+        //g.translate(0, Sizes.INVENTORY_MARGIN_Y);
         items.forEach((Slot s) -> s.render(g));
+        
+        //g.translate(0, Sizes.INVENTORY_MARGIN_Y);
         hotbar.forEach((QuickSlot s) -> s.render(g, false));
+        
+        //g.translate(0, -2*Sizes.INVENTORY_MARGIN_Y);
     }
     
     public void drawRoundRect(Graphics g, float x, float y, float width, float height, int cornerRadius, int thicknes) {

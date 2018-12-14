@@ -10,7 +10,6 @@ import nightknight.interfaces.MouseListener;
 import nightknight.interfaces.Renderable;
 import nightknight.model.Player;
 import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;

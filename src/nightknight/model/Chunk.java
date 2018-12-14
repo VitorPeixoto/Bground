@@ -2,6 +2,7 @@ package nightknight.model;
 
 import nightknight.BlockGenerator;
 import nightknight.assets.data.BlockType;
+import nightknight.assets.data.TreeType;
 import nightknight.collision.CollisionController;
 import nightknight.constants.Debug;
 import nightknight.constants.Sizes;
@@ -15,6 +16,7 @@ public class Chunk implements Renderable, Changeable, Shiftable {
     private int x, y;
     private int firstColumn, lastColumn, firstRow, lastRow;
     private Block blocks[][] = new Block[Sizes.CHUNK_SIZE][Sizes.CHUNK_SIZE];
+    private Tree t;
     
     public Chunk(int x, int y) {
         this.x = x;
@@ -30,7 +32,12 @@ public class Chunk implements Renderable, Changeable, Shiftable {
         for(int linha = 0; linha < Sizes.CHUNK_SIZE; linha++) {
             for(int coluna = 0; coluna < Sizes.CHUNK_SIZE; coluna++) {
                 Block block = new Block(blockInitialX+coluna, blockInitialY+linha, BlockGenerator.generateBlock(blockInitialY+linha));
-                if(blockInitialY+linha == BlockGenerator.getSurface()) block.setSighted(true);
+                if(blockInitialY+linha == BlockGenerator.getSurface()) {
+                    block.setSighted(true);
+                    //if(Math.random() == 0.0) {
+                        t = TreeType.OAK_TREE.generateTree(coluna);
+                    //}
+                }
                 if(block.getBlockType() != BlockType.AIR) {
                     CollisionController.getInstance().addRectangleObject(block);
                 }
@@ -55,6 +62,7 @@ public class Chunk implements Renderable, Changeable, Shiftable {
                     blocks[linha][coluna].render(g);
                 }
             }
+            if(t != null) t.render(g);
             if(Debug.DEBUG) debug(g);
         g.popTransform();
     }

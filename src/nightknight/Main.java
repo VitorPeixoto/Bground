@@ -17,11 +17,13 @@ import org.newdawn.slick.SlickException;
 public class Main {
     public static boolean DEBUG = true;
     public static void main(String[] args) {
-        System.setProperty("java.library.path", "libraries");
-        System.setProperty("org.lwjgl.librarypath", new File("libraries/natives").getAbsolutePath());
+        /*System.setProperty("java.library.path", "libraries");
+        //System.setProperty("org.lwjgl.librarypath", new File("libraries/natives").getAbsolutePath());
+        System.setProperty("org.lwjgl.librarypath", "libraries/natives");*/
         
         Toolkit toolkit = Toolkit.getDefaultToolkit();   
-        Dimension dimension = toolkit.getScreenSize();
+        //Dimension dimension = toolkit.getScreenSize();
+        Dimension dimension = new Dimension(1600, 900);
         
         Sizes.SCREEN_WIDTH = dimension.width;
         Sizes.SCREEN_HEIGHT = dimension.height;

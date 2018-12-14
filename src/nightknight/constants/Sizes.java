@@ -15,7 +15,7 @@ public final class Sizes {
     public static int LINES_PER_SCREEN = SCREEN_HEIGHT/TILE_SIZE;
     public static int COLUMNS_PER_SCREEN = SCREEN_WIDTH/TILE_SIZE;    
     
-    public static final int INVENTORY_SLOT_AMOUNT = 60;
+    public static final int INVENTORY_SLOT_AMOUNT = 40;
     public static final int INVENTORY_SLOT_COLUMN = 10;
     public static final int INVENTORY_SLOT_SIZE = 64;
     public static final int INVENTORY_SLOT_GAP = 2;

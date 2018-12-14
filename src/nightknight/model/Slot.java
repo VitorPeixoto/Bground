@@ -1,9 +1,7 @@
 package nightknight.model;
 
 import nightknight.collision.RectangleObject;
-import nightknight.constants.Sizes;
 import nightknight.interfaces.Renderable;
-import nightknight.model.items.AnyItem;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
@@ -11,8 +9,8 @@ import org.newdawn.slick.Graphics;
  *
  * @author Vitor
  */
-public class Slot<T extends Item & AnyItem> extends RectangleObject implements Renderable {
-    protected T item;
+public class Slot extends RectangleObject implements Renderable {
+    protected Item item;
     
     protected Color shadow, bright, fill;
     
@@ -24,25 +22,33 @@ public class Slot<T extends Item & AnyItem> extends RectangleObject implements R
         fill   = new Color(Color.gray);
     }
     
-    public boolean pushItem(T item) {
+    public Item pushItem(Item item, boolean click) {
         if(this.isEmpty()) {
             this.item = item;
-            return true;
+            //return true;
+            return item;
         }
         if(this.item.getType().equals(item.getType()) && 
            (this.item.getAmount() + item.getAmount() <= this.item.getType().getMaxAmount())) {
             this.item.addAmount(item.getAmount());
-            return true;
+            //return true;
+            return item;
         }
-        return false;
+        //Troca o item selecionado pelo atual (somente no clique do jogador)
+        if(click) {
+            Item aux = this.item;
+            this.item = item;
+            return aux;
+        }
+        return null;
     }
     
-    public T getItem() {
+    public Item getItem() {
         return this.item;
     }
     
-    public T removeItem() {
-        T item = this.item;
+    public Item removeItem() {
+        Item item = this.item;
         this.item = null;
         return item;
     }
@@ -78,7 +84,7 @@ public class Slot<T extends Item & AnyItem> extends RectangleObject implements R
         g.fillRoundRect(x+border, y+border, width+1-(2*border), height+1-(2*border), 0);
     }
 
-    public void setItem(T item) {
+    public void setItem(Item item) {
         this.item = item;
     }
 }
