@@ -2,6 +2,7 @@ package nightknight;
 
 import java.util.ArrayList;
 import nightknight.collision.CollisionController;
+import nightknight.constants.Debug;
 import nightknight.constants.Sizes;
 import nightknight.eventos.MouseEvent;
 import nightknight.interfaces.Changeable;
@@ -9,6 +10,7 @@ import nightknight.interfaces.KeyboardListener;
 import nightknight.interfaces.MouseListener;
 import nightknight.interfaces.Renderable;
 import nightknight.model.Player;
+import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -30,6 +32,8 @@ public class DefaultGameState implements GameState, KeyboardListener, MouseListe
     private DropPool dp;
     private Map map;
     
+    private Sky sky;
+    
     private CollisionController tree;
     
     public DefaultGameState() {
@@ -40,7 +44,9 @@ public class DefaultGameState implements GameState, KeyboardListener, MouseListe
         changeables = new ArrayList<>();
         renderables = new ArrayList<>();
         
-        player = new Player(0, Sizes.MAP_HEIGHT);
+        player = new Player(0, BlockGenerator.getSurface()+1);
+        sky = new Sky();
+        //player = new Player(10, 10);
     }
     
     @Override
@@ -58,16 +64,32 @@ public class DefaultGameState implements GameState, KeyboardListener, MouseListe
         
         renderables.add(map); 
         renderables.add(player);
-        renderables.add(inventoryController);
         renderables.add(dp);
-        //tree.addRectangleObject(player);
     }
-
+    
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
-        /*for(int i = 0; i < renderables.size(); i++)
-            renderables.get(i).render(grphcs);*/
-        renderables.forEach((renderable) -> renderable.render(grphcs));
+        //Skybox
+        sky.render(grphcs);
+        // Game stuff
+        grphcs.pushTransform();
+            grphcs.translate(Sizes.SCREEN_WIDTH/2, (Sizes.SCREEN_HEIGHT-(Sizes.TILE_SIZE/2)-(Sizes.SCREEN_HEIGHT/2)));
+            GL11.glRotatef(180, 1, 0, 0);
+            
+            grphcs.pushTransform();
+                renderables.forEach((renderable) -> renderable.render(grphcs));
+            grphcs.popTransform();
+            
+            //Debug stuff
+            /*grphcs.setColor(Color.yellow);
+            grphcs.drawLine(-3000, 0, 6000, 0);
+            grphcs.fillRect(-10, -10, 20, 20);
+            grphcs.setColor(Color.red);        
+            grphcs.drawLine(-3000, 100, 6000, 100);
+            grphcs.fillRect(-10+30, 90, 20, 20);*/
+        grphcs.popTransform();
+        //UI
+        inventoryController.render(grphcs);
     }
 
     @Override
@@ -142,6 +164,9 @@ public class DefaultGameState implements GameState, KeyboardListener, MouseListe
         }
         if(c == 'e') {
             inventoryController.toggleHidden();
+        }
+        if(c == 'v') {
+            Debug.DEBUG = !Debug.DEBUG;
         }
         KEYBOARD.put(i, true);
     }
