@@ -20,6 +20,9 @@ public enum BlockType {
     LAPIS_ORE("Lapis Lazuli Ore", "oreLapis.png", 200, new Drop(ItemType.LAZULI, 4, 8, 1)),
     DIAMOND_ORE("Diamond Ore", "oreDiamond.png", 200, new Drop(ItemType.DIAMOND)),
     REDSTONE_ORE("Redstone Ore", "oreRedstone.png", 200, new Drop(ItemType.REDSTONE, 4, 5, 1)),
+    
+    OAK_WOOD("Oak Wood", "oak_wood.png", 200),
+    OAK_LEAVES("Oak Leaves", "oak_leaves.png", 20),
     ;
     
     private BlockType(String name, String imageName, int hardness) {

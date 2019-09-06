@@ -14,7 +14,7 @@ public class BlockGenerator {
     public static BlockType generateBlock(int y) {
         if(y > Sizes.MAP_HEIGHT-2) return BlockType.AIR;
         else if(y == getSurface()) return BlockType.GRASS;
-        else if(y > Sizes.MAP_HEIGHT-8) return BlockType.DIRT;
+        //else if(y > Sizes.MAP_HEIGHT-8) return BlockType.DIRT;
         else if(y == 0) return BlockType.BEDROCK;
         else if(y < (Sizes.MAP_HEIGHT*0.1)) return generateDeepestBlocks();
         else if(y < (Sizes.MAP_HEIGHT*0.5)) return generateDeepBlocks();        

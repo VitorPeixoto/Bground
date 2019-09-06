@@ -2,6 +2,7 @@ package nightknight;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import nightknight.constants.Debug;
 import nightknight.constants.Sizes;
 import nightknight.interfaces.Changeable;
 import nightknight.interfaces.KeyboardListener;
@@ -106,8 +107,10 @@ public class Map implements Renderable, Changeable, KeyboardListener, Shiftable 
         if(!chunks.containsKey(key)) {
             Chunk c = new Chunk(x, y);
             c.load();
-            System.out.println("Loaded chunk "+key);
-            System.out.println("Chunks loaded: "+chunks.size());
+            if(Debug.DEBUG) {
+                System.out.println("Loaded chunk "+c.toString());
+                System.out.println("Chunks loaded: "+chunks.size());
+            }
             chunks.put(key, c);
         }
     }

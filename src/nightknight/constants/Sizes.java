@@ -23,7 +23,7 @@ public final class Sizes {
     public static final int INVENTORY_MARGIN_X = 20;
     public static final int INVENTORY_MARGIN_Y = 30;
     
-    public static final int PLAYER_SIGHT = 1;
+    public static final int PLAYER_SIGHT = 2;
     
     public static final int CHUNK_SIZE = 15;
     public static final int CHUNK_RADIUS = 1;

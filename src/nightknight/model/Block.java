@@ -20,14 +20,23 @@ public class Block extends RectangleObject implements Renderable {
     private boolean mined, sighted;
     private int hardness;
     private Color color;
-    
+
     public Block(int x, int y, BlockType type) {
         super(x, y, 1, 1, Sizes.TILE_SIZE);
-        this.type = type;
+        this.type  = type;
         this.image = type.getImage();
-        mined = sighted = false;
+        this.setSighted(false);
+        mined = false;
+        hardness = type.getHardness();        
+    }
+
+    public Block(int x, int y, BlockType type, boolean sighted) {
+        super(x, y, 1, 1, Sizes.TILE_SIZE);
+        this.type    = type;
+        this.image   = type.getImage();
+        this.setSighted(sighted);
+        mined    = false;
         hardness = type.getHardness();
-        color = Color.black;
     }
 
     public boolean isMined() {
@@ -45,11 +54,11 @@ public class Block extends RectangleObject implements Renderable {
         }
         return mined;
     }
-    
+
     public void setMined(boolean mined) {
         this.mined = mined;
     }
-    
+
     public BlockType getBlockType() {
         return this.type;
     }

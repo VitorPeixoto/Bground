@@ -2,6 +2,7 @@ package nightknight;
 
 import java.util.ArrayList;
 import nightknight.collision.CollisionController;
+import nightknight.constants.Debug;
 import nightknight.constants.Sizes;
 import nightknight.eventos.MouseEvent;
 import nightknight.interfaces.Changeable;
@@ -163,6 +164,9 @@ public class DefaultGameState implements GameState, KeyboardListener, MouseListe
         }
         if(c == 'e') {
             inventoryController.toggleHidden();
+        }
+        if(c == 'v') {
+            Debug.DEBUG = !Debug.DEBUG;
         }
         KEYBOARD.put(i, true);
     }

@@ -8,6 +8,7 @@ import nightknight.assets.images.ImageAssets;
 import nightknight.collision.CollisionController;
 import nightknight.collision.RectangleObject;
 import nightknight.collision.Vector2f;
+import nightknight.constants.Constants;
 import nightknight.constants.Sizes;
 import nightknight.interfaces.Changeable;
 import nightknight.interfaces.KeyboardListener;
@@ -26,7 +27,7 @@ public class Player extends RectangleObject implements KeyboardListener, Rendera
     private double miningPower = 20;
     private Image image;
     private CollisionController tree = CollisionController.getInstance();
-    
+
     public Player(int x, int y) {
         super(x, y, 1, 1, Sizes.TILE_SIZE);
         image = ImageAssets.getImage("steve.png");
@@ -37,16 +38,16 @@ public class Player extends RectangleObject implements KeyboardListener, Rendera
     public void atualiza() {
         if(KEYBOARD == null) return;
         if(KEYBOARD.getOrDefault(Input.KEY_W, false)) {
-            movement.y = 0.2f;
+            movement.y = Constants.PLAYER_SPEED;
         }
         if(KEYBOARD.getOrDefault(Input.KEY_A, false)) {
-            movement.x = -0.2f;
+            movement.x = -Constants.PLAYER_SPEED;
         }
         if(KEYBOARD.getOrDefault(Input.KEY_S, false)) {
-            movement.y = -0.2f;
+            movement.y = -Constants.PLAYER_SPEED;
         }
         if(KEYBOARD.getOrDefault(Input.KEY_D, false)) {
-            movement.x = 0.2f;
+            movement.x = Constants.PLAYER_SPEED;
         }
         if(handleCollision()) {
             position.add(movement);            

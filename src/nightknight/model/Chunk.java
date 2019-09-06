@@ -22,7 +22,7 @@ public class Chunk implements Renderable, Changeable, Shiftable {
         this.x = x;
         this.y = y;
         firstColumn = firstRow = 0;
-        lastColumn = lastRow = Sizes.CHUNK_SIZE;
+        lastColumn  = lastRow  = Sizes.CHUNK_SIZE;
     }
 
     public void load() {
@@ -32,11 +32,8 @@ public class Chunk implements Renderable, Changeable, Shiftable {
         for(int linha = 0; linha < Sizes.CHUNK_SIZE; linha++) {
             for(int coluna = 0; coluna < Sizes.CHUNK_SIZE; coluna++) {
                 Block block = new Block(blockInitialX+coluna, blockInitialY+linha, BlockGenerator.generateBlock(blockInitialY+linha));
-                if(blockInitialY+linha == BlockGenerator.getSurface()) {
+                if(blockInitialY+linha > (BlockGenerator.getSurface() - 4)) {
                     block.setSighted(true);
-                    //if(Math.random() == 0.0) {
-                        t = TreeType.OAK_TREE.generateTree(coluna);
-                    //}
                 }
                 if(block.getBlockType() != BlockType.AIR) {
                     CollisionController.getInstance().addRectangleObject(block);
@@ -44,6 +41,11 @@ public class Chunk implements Renderable, Changeable, Shiftable {
                 blocks[linha][coluna] = block;
             }
         }
+        if(isSurfaceChunk()) t = TreeType.OAK_TREE.generateTree(blockInitialX + (int)(Math.random()*Sizes.CHUNK_SIZE));
+    }
+    
+    private boolean isSurfaceChunk() {
+        return Math.floor(BlockGenerator.getSurface() / Sizes.CHUNK_SIZE) == y;
     }
     
     public void unload() {
@@ -79,6 +81,11 @@ public class Chunk implements Renderable, Changeable, Shiftable {
         return ""+x+y;
     }
 
+    @Override
+    public String toString() {
+        return "("+x+","+y+")";
+    }
+    
     @Override
     public void atualiza() {
         firstColumn = (shift.width - (x*Sizes.CHUNK_SIZE))-(Sizes.COLUMNS_PER_SCREEN/2);

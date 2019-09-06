@@ -35,6 +35,7 @@
 ## Outro
 - [x] Corrigir dimensões verticais do mapa
 - [x] Organizar Sizes.WORLD_HEIGHT
+- [ ] Centralizar localização de constantes
 
 # Finalizados
 
